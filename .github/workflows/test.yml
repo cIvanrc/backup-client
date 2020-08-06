@@ -1,9 +1,9 @@
-name: test
+name: Build and Test
 
 on: push
 
 jobs:
-  test:
+  build-and-test:
     name: Runing Test
     runs-on: ubuntu-latest
 
@@ -14,19 +14,23 @@ jobs:
           access_token: ${{ secrets.cancel_token }}
 
       - uses: actions/checkout@v1
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+      - uses: bahmutov/npm-install@HEAD
         with:
-          node-version: 14
+          working-directory: .cache/yarn
 
       - name: yarn install
         run: |
           yarn install --frozen-lockfile
+        working-directory: .cache/yarn
 
       - name: Run headless test
         uses: GabrielBB/xvfb-action@v1.2
         with:
           run: |
+            yarn package-ci
             yarn lint
             yarn tsc
             yarn test
+            yarn build-e2e
+            yarn test-e2e
+        working-directory: .cache/yarn
