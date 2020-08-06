@@ -1,11 +1,14 @@
-name: test
+name: Build and Test
 
 on: push
 
 jobs:
-  test:
-    name: Runing Test
-    runs-on: ubuntu-latest
+  build-and-test:
+    name: Runing Build and Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Cancel Previous Runs
@@ -13,20 +16,36 @@ jobs:
         with:
           access_token: ${{ secrets.cancel_token }}
 
-      - uses: actions/checkout@v1
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
         with:
-          node-version: 14
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: yarn install
         run: |
           yarn install --frozen-lockfile
 
-      - name: Run headless test
+      - name: Runing tests
         uses: GabrielBB/xvfb-action@v1.2
         with:
           run: |
             yarn lint
-            yarn tsc
             yarn test
+
+      - name: Runing build
+        uses: GabrielBB/xvfb-action@v1.2
+        with:
+          run: |
+            yarn package-ci
+            yarn build-e2e
+            yarn test-e2e
