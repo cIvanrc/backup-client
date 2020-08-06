@@ -40,7 +40,9 @@ jobs:
             yarn test
 
       - name: Runing build
-        run: |
-          yarn package-ci
-          yarn build-e2e
-          yarn test-e2e
+        uses: GabrielBB/xvfb-action@v1.2
+        with:
+          run: |
+            yarn package-ci
+            yarn build-e2e
+            yarn test-e2e
