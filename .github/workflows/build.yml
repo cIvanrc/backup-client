@@ -1,13 +1,13 @@
 name: build
-on: [push]
+on: push
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [windows-2019, ubuntu-latest]
 
     steps:
       - name: Cancel Previous Runs
@@ -27,12 +27,9 @@ jobs:
         run: |
           yarn install --frozen-lockfile
 
-      - name: yarn test
+      - name: Build
         uses: GabrielBB/xvfb-action@v1.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.cancel_token }}
         with:
           run: |
             yarn package-ci
-            yarn tsc
             yarn build-e2e

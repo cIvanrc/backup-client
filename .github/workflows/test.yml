@@ -1,13 +1,11 @@
 name: test
-on: [push]
+
+on: push
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-18.04]
+  test:
+    name: Runing Test
+    runs-on: ubuntu-latest
 
     steps:
       - name: Cancel Previous Runs
@@ -15,9 +13,7 @@ jobs:
         with:
           access_token: ${{ secrets.cancel_token }}
 
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-
+      - uses: actions/checkout@v1
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
@@ -27,10 +23,8 @@ jobs:
         run: |
           yarn install --frozen-lockfile
 
-      - name: yarn test
+      - name: Run headless test
         uses: GabrielBB/xvfb-action@v1.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
             yarn lint
