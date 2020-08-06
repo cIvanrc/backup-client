@@ -35,6 +35,7 @@ jobs:
       - name: Runing tests
         run: |
           yarn lint
+          yarn tsc
           yarn test
 
       - name: Runing build
