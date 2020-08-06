@@ -1,4 +1,4 @@
-name: test
+name: build
 on: [push]
 
 jobs:
@@ -7,7 +7,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [windows-2019]
 
     steps:
       - name: Cancel Previous Runs
@@ -30,9 +30,9 @@ jobs:
       - name: yarn test
         uses: GabrielBB/xvfb-action@v1.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.cancel_token }}
         with:
           run: |
-            yarn lint
+            yarn package-ci
             yarn tsc
-            yarn test
+            yarn build-e2e
