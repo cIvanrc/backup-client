@@ -13,15 +13,24 @@ jobs:
         with:
           access_token: ${{ secrets.cancel_token }}
 
-      - uses: actions/checkout@v1
-      - uses: bahmutov/npm-install@HEAD
+      - uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
         with:
-          working-directory: .cache/yarn
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: yarn install
         run: |
           yarn install --frozen-lockfile
-        working-directory: .cache/yarn
 
       - name: Run headless test
         uses: GabrielBB/xvfb-action@v1.2
@@ -33,4 +42,3 @@ jobs:
             yarn test
             yarn build-e2e
             yarn test-e2e
-        working-directory: .cache/yarn
