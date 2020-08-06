@@ -15,7 +15,7 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.4.1
         with:
-          access_token: ${{ github.cancel_token }}
+          access_token: ${{ secrets.cancel_token }}
 
       - name: Check out Git repository
         uses: actions/checkout@v2
