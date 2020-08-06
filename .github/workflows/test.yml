@@ -35,9 +35,9 @@ jobs:
       - name: Runing tests
         uses: GabrielBB/xvfb-action@v1.2
         with:
-        run: |
-          yarn lint
-          yarn test
+          run: |
+            yarn lint
+            yarn test
 
       - name: Runing build
         run: |
