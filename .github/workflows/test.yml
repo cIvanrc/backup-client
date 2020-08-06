@@ -33,9 +33,9 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: Runing tests
+        uses: GabrielBB/xvfb-action@v1.2
         run: |
           yarn lint
-          yarn tsc
           yarn test
 
       - name: Runing build
