@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  build:
+  release:
     runs-on: windows-2019
 
     steps:
