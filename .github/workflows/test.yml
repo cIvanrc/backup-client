@@ -1,8 +1,9 @@
 on: [push]
 
 jobs:
-  build:
+  release:
     runs-on: ${{ matrix.os }}
+    name: Building
 
     strategy:
       matrix:
