@@ -3,9 +3,9 @@ name: Testing
 on: [push]
 
 jobs:
-  build:
+  release:
     runs-on: ${{ matrix.os }}
-    name: NameTest
+    name: Building
 
     strategy:
       matrix:
@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
