@@ -1,9 +1,7 @@
-name: Testing
-
 on: [push]
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
